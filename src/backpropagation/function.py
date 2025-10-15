@@ -57,6 +57,6 @@ class Sigmoid(Function):
         return self.output
 
     def backward(self) -> np.ndarray:
-        if self.output is None
+        if self.output is None:
             raise ValueError("Sigmoid has not been called yet")
-        return output * (1 - output)
+        return self.output * (1 - self.output)

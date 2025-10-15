@@ -1,7 +1,8 @@
 from typing import List, Optional
 
 import numpy as np
-from function import Constant, Function, ReLU, Sigmoid
+
+from backpropagation.function import Constant, Function, ReLU, Sigmoid
 
 
 class SimpleLayer:
@@ -12,13 +13,11 @@ class SimpleLayer:
         weights: Optional[np.ndarray] = None,
         function: Function = Constant,
     ):
-        self.weights = (
-            weights if weights is not None else np.random.randn(n_input, n_output)
-        )
+        self.weights = weights if weights is not None else np.random.randn(n_input, n_output)
         self.function = function
 
     def forward(self, inputs: np.ndarray) -> np.ndarray:
-        return self.function.forward(np.dot(inputs, self.weights))
+        return self.function.forward(np.dot(self.weights, inputs))
 
     def backward(self, gradients: np.ndarray) -> np.ndarray:
         # fix me
@@ -31,8 +30,8 @@ class SimpleLayer:
 class SimpleNetwork:
     def __init__(self):
         self.layers = []
-        self.layers.append(SimpleLayer(2, 2, np.array([0, 0, 0, 0]), ReLU()))
-        self.layers.append(SimpleLayer(2, 2, np.array([0, 0]), Sigmoid()))
+        self.layers.append(SimpleLayer(2, 2, np.array([[1.0, 0.5], [2, -0.5]]), ReLU()))
+        self.layers.append(SimpleLayer(2, 2, np.array([[0.5, 0.25]]), Sigmoid()))
 
     def _loss(self, expected: np.ndarray, actual: np.ndarray) -> float:
         self.loss = np.sum((expected - actual) ** 2) / len(expected)
@@ -43,7 +42,7 @@ class SimpleNetwork:
         o = inputs
         for layer in self.layers:
             o = layer.forward(o)
-            layer_outputs.append = o
+            layer_outputs.append(o)
         layer_outputs.append(self._loss(outputs, o))
         return layer_outputs
 

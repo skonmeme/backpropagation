@@ -8,3 +8,10 @@ dependencies = [
     "numpy>=2.3.3",
     "torch>=2.8.0",
 ]
+
+[project.scripts]
+backpropagation = "backpropagation.__main__:main"
+
+[build-system]
+requires = ["uv_build"]
+build-backend = "uv_build"
